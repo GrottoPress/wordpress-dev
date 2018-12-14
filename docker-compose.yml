@@ -70,8 +70,7 @@ services:
   wordpress:
     depends_on:
       - mariadb
-    image: wordpress:${WP_VERSION:-}-php${PHP_VERSION:-}-fpm-alpine
-    build: ./img/wordpress/${WP_VERSION:-}-php-${PHP_VERSION:-}-fpm-alpine
+    image: grottopress/wordpress:${WP_VERSION:-}-php${PHP_VERSION:-}-fpm-alpine
     volumes:
       - app:/var/www/html
       - ./app:/var/www/html/wp-content

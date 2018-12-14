@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Fix incorrect license year
+- Switch to use WordPress images from docker hub
 
 ## 0.1.0 - 2018-12-09
 

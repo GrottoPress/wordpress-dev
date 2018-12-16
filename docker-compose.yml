@@ -1,82 +1,76 @@
 version: "3"
 services:
   composer:
+    image: prooph/composer:${PHP_VERSION:-}
     depends_on:
       - wordpress
-    image: prooph/composer:${PHP_VERSION:-}
+    working_dir: /var/www/html/${WORK_DIR:-}
     volumes:
       - app:/var/www/html
       - ./app:/var/www/html/wp-content
       - ~/.composer:/root/composer
-    working_dir: /var/www/html/${WORK_DIR:-}
     networks:
       - back
   git:
+    image: alpine/git:latest
     depends_on:
       - wordpress
-    image: alpine/git:latest
+    working_dir: /var/www/html/${WORK_DIR:-}
     volumes:
       - app:/var/www/html
       - ./app:/var/www/html/wp-content
       - ~/.gitconfig:/root/.gitconfig:ro
       - ~/.gitignore_global:${HOME}/.gitignore_global:ro
       - ~/.ssh:/root/.ssh:ro
-    working_dir: /var/www/html/${WORK_DIR:-}
     networks:
       - back
   mariadb:
     image: mariadb:latest
-    volumes:
-      - ./db:/var/lib/mysql
-      - ./log/mysql:/var/log/mysql
-      - ./etc/mysql/wordpress.cnf:/etc/mysql/mariadb.conf.d/wordpress.cnf:ro
-    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS:-}
       MYSQL_DATABASE: ${DB_NAME:-}
       MYSQL_USER: ${DB_USER:-}
       MYSQL_PASSWORD: ${DB_PASS:-}
+    restart: always
+    volumes:
+      - ./db:/var/lib/mysql
+      - ./log/mysql:/var/log/mysql
+      - ./etc/mysql/wordpress.cnf:/etc/mysql/mariadb.conf.d/wordpress.cnf:ro
     networks:
       - back
   nginx:
+    image: nginx:stable-alpine
     depends_on:
       - wordpress
-    image: nginx:stable-alpine
+    environment:
+      NGINX_HOST: ${NGX_HOST:-}
+    command: /bin/sh -c "envsubst '$$NGINX_HOST' < /etc/nginx/conf.d/wordpress.template > /etc/nginx/conf.d/wordpress.conf && exec nginx -g 'daemon off;'"
     ports:
       - "${NGX_PORT:-}:80"
+    restart: always
     volumes:
       - app:/var/www/html:ro
       - ./app:/var/www/html/wp-content:ro
       - ./etc/nginx/wordpress.template:/etc/nginx/conf.d/wordpress.template:ro
       - ./log/nginx:/var/log/nginx
-    restart: always
-    environment:
-      NGINX_HOST: ${NGX_HOST:-}
-    command: /bin/sh -c "envsubst '$$NGINX_HOST' < /etc/nginx/conf.d/wordpress.template > /etc/nginx/conf.d/wordpress.conf && exec nginx -g 'daemon off;'"
     networks:
       - front
   node:
+    image: node:lts-alpine
     depends_on:
       - wordpress
-    image: node:lts-alpine
+    working_dir: /var/www/html/${WORK_DIR:-}
     volumes:
       - app:/var/www/html
       - ./app:/var/www/html/wp-content
       - ~/.npm:/root/.npm
-    working_dir: /var/www/html/${WORK_DIR:-}
     # user: node
     networks:
       - back
   wordpress:
+    image: grottopress/wordpress:${WP_VERSION:-}-php${PHP_VERSION:-}-fpm-alpine
     depends_on:
       - mariadb
-    image: grottopress/wordpress:${WP_VERSION:-}-php${PHP_VERSION:-}-fpm-alpine
-    volumes:
-      - app:/var/www/html
-      - ./app:/var/www/html/wp-content
-      - ./etc/fpm/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini:ro
-      - ./log/fpm:/var/log/php
-    restart: always
     environment:
       WORDPRESS_DEBUG: ${WP_DEBUG:-}
       WORDPRESS_DB_HOST: mariadb:3306
@@ -90,20 +84,26 @@ services:
       WORDPRESS_LOGGED_IN_SALT: ${WP_LOGGED_IN_SALT:-}
       WORDPRESS_CONFIG_EXTRA: |
         define( 'AUTOMATIC_UPDATER_DISABLED', true );
+    restart: always
+    volumes:
+      - app:/var/www/html
+      - ./app:/var/www/html/wp-content
+      - ./etc/fpm/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini:ro
+      - ./log/fpm:/var/log/php
     networks:
       - front
       - back
   wp-cli:
+    image: wordpress:cli-php${PHP_VERSION:-}
     depends_on:
       - wordpress
-    image: wordpress:cli-php${PHP_VERSION:-}
     volumes:
       - app:/var/www/html
       - ./app:/var/www/html/wp-content
     networks:
       - back
 networks:
-  front: {}
   back: {}
+  front: {}
 volumes:
   app: {}

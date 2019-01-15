@@ -62,7 +62,7 @@ services:
     networks:
       - back
   wordpress:
-    image: grottopress/wordpress:${WP_VERSION:-}-php${PHP_VERSION:-}-fpm-alpine
+    image: wordpress:${WP_VERSION:-}-php${PHP_VERSION:-}-fpm-alpine
     depends_on:
       - mariadb
     environment:

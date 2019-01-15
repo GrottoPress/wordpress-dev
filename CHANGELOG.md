@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Remove unneeded dependencies among containers
+- Replace WordPress image with official docker image
 
 ### Removed
 - Disable opcache

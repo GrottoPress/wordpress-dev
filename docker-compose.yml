@@ -2,8 +2,6 @@ version: "3"
 services:
   composer:
     image: prooph/composer:${PHP_VERSION:-}
-    depends_on:
-      - wordpress
     working_dir: /var/www/html/${WORK_DIR:-}
     volumes:
       - app:/var/www/html
@@ -13,8 +11,6 @@ services:
       - back
   git:
     image: alpine/git:latest
-    depends_on:
-      - wordpress
     working_dir: /var/www/html/${WORK_DIR:-}
     volumes:
       - app:/var/www/html
@@ -57,8 +53,6 @@ services:
       - front
   node:
     image: node:lts-alpine
-    depends_on:
-      - wordpress
     working_dir: /var/www/html/${WORK_DIR:-}
     volumes:
       - app:/var/www/html
@@ -96,7 +90,7 @@ services:
   wp-cli:
     image: wordpress:cli-php${PHP_VERSION:-}
     depends_on:
-      - wordpress
+      - mariadb
     volumes:
       - app:/var/www/html
       - ./app:/var/www/html/wp-content

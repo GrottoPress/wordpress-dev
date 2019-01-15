@@ -45,52 +45,68 @@ You should have set the `WORK_DIR` environment variable to the directory of the 
 
 This way, you do not need to `cd` into that directory to issue `git`, `npm` or `composer` commands.
 
-### Using WP-CLI
+## Using Commands
 
-To run the WP-CLI service, run `docker-compose run --rm wp-cli wp`.
+Copy and paste the following into your `~/.bashrc` file.
 
-You may alias the `wp` command to this, thus: `alias wp="docker-compose run --rm wp-cli wp"`. You may, then, use `wp` instead of typing the entire command.
+```bash
+# BEGIN: Docker/compose
+#
 
-Eg: `wp core version`
+docker_compose_git()
+{
+    if [ -f "${PWD}/docker-compose.yml" ]; then
+        docker-compose run --rm git "$@"
+    else
+        $(which git) "$@"
+    fi
+}
 
-Add the alias command in your `~/.bashrc` file, if you want to set this permanently.
+docker_compose_composer()
+{
+    if [ -f "${PWD}/docker-compose.yml" ]; then
+        docker-compose run --rm composer "$@"
+    else
+        $(which composer) "$@"
+    fi
+}
 
-### Using Composer
+docker_compose_wp()
+{
+    if [ -f "${PWD}/docker-compose.yml" ]; then
+        docker-compose run --rm wp-cli wp "$@"
+    else
+        $(which wp) "$@"
+    fi
+}
 
-To run the Composer service, run `docker-compose run --rm composer`.
+docker_compose_npm()
+{
+    if [ -f "${PWD}/docker-compose.yml" ]; then
+        docker-compose run --rm node npm "$@"
+    else
+        $(which npm) "$@"
+    fi
+}
 
-You may alias the `composer` command to this, thus: `alias composer="docker-compose run --rm composer"`. You may, then, use `composer` instead of typing the entire command.
+alias wp="docker_compose_wp"
+alias composer="docker_compose_composer"
+alias npm="docker_compose_npm"
+alias git="docker_compose_git"
 
-Eg: `composer update`
+#
+# END: Docker/Compose
+```
+Run `source ~/.bashrc` or restart terminal, to load the new configuration.
 
-Add the alias in your `~/.bashrc` file, if you want to set this permanently.
-
-### Using NPM
-
-To run NPM, run: `docker-compose run --rm node npm`.
-
-You may alias the `npm` command to this, thus: `alias npm="docker-compose run --rm node npm"`. You may, then, use `npm` instead of typing the entire command.
-
-Eg: `npm install`
-
-Add the alias in your `~/.bashrc` file, if you want to set this permanently.
-
-### Using Git
-
-To run git, run: `docker-compose run --rm git`.
-
-You may alias the `git` command to this, thus: `alias git="docker-compose run --rm git"`. You may, then, use `git` instead of typing the entire command.
-
-Eg: `git status`
-
-Add the alias in your `~/.bashrc` file, if you want to set this permanently.
+You may then use `wp`, `composer`, `npm` and `git` commands as you would normally.
 
 ## Useful commands
 
 - Start containers: `docker-compose up -d`
 - Stop containers: `docker-compose down`
-- Check logs: `docker-compose logs <service>`. Eg: `docker-compose logs nginx`
-- Access shell prompt: `docker-compose exec <service> /bin/sh`. Eg: `docker-compose exec nginx /bin/sh`
+- Check container logs: `docker-compose logs <service>`. Eg: `docker-compose logs nginx`
+- Access container shell prompt: `docker-compose exec <service> /bin/sh`. Eg: `docker-compose exec nginx /bin/sh`
 
 ## Notes on Changing WordPress version
 

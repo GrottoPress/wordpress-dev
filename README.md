@@ -6,7 +6,8 @@ A WordPress development environment, using [docker](https://www.docker.com) (via
 
 - Create a new directory for your project: `mkdir my-wordpress-project`
 - Change into this directory: `cd my-wordpress-project`
-- Clone this repository: `git clone https://github.com/GrottoPress/wordpress-dev.git .`
+- Clone this repository: `git clone https://github.com/GrottoPress/wordpress-dev.git ../wp-dev`
+- Copy `src/` files into your new project's directory: `cp -rf ../wp-dev/src/* .`
 - Copy the `.sample.env` file to `.env`: `cp .sample.env .env`
 - Set permissions for the `.env` file: `chmod 0600 .env`
 - Edit the variables in your new `.env` file to taste
@@ -37,9 +38,9 @@ The following variables are available for use in your `.env` file:
 
 ## Get to Work
 
-The `wp-content` directory of the WordPress installation corresponds to the the `./app` directory of this setup.
+The `wp-content` directory of the WordPress installation corresponds to the the `app/` directory of your project.
 
-Therefore, if developing a theme, it goes into the `./app/themes` directory. Plugins go into the `./app/plugins` directory.
+Therefore, if developing a theme, it goes into the `app/themes/` directory. Plugins go into the `app/plugins/` directory.
 
 You should have set the `WORK_DIR` environment variable to the directory of the theme or plugin you are working on.
 

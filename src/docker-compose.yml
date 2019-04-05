@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   composer:
     image: prooph/composer:${PHP_VERSION:-}
@@ -30,8 +30,8 @@ services:
     restart: always
     volumes:
       - ./db:/var/lib/mysql
-      - ./log/mysql:/var/log/mysql
-      - ./etc/mysql/wordpress.cnf:/etc/mysql/mariadb.conf.d/wordpress.cnf:ro
+      - ./etc/mysql/wordpress.cnf:/etc/mysql/conf.d/wordpress.cnf:ro
+      # - ./log/mysql:/var/log/mysql
     networks:
       - back
   nginx:
@@ -44,16 +44,16 @@ services:
       /bin/sh -c
       "envsubst '$$NGINX_HOST' <
       /etc/nginx/conf.d/wordpress.template >
-      /etc/nginx/conf.d/wordpress.conf &&
+      /etc/nginx/conf.d/default.conf &&
       exec nginx -g 'daemon off;'"
     ports:
-      - "${NGX_PORT:-}:80"
+      - "127.0.0.1:${NGX_PORT:-}:80"
     restart: always
     volumes:
       - app:/var/www/html:ro
       - ./app:/var/www/html/wp-content:ro
       - ./etc/nginx/wordpress.template:/etc/nginx/conf.d/wordpress.template:ro
-      - ./log/nginx:/var/log/nginx
+      # - ./log/nginx:/var/log/nginx
     networks:
       - front
   node:
@@ -88,10 +88,10 @@ services:
       - app:/var/www/html
       - ./app:/var/www/html/wp-content
       - ./etc/fpm/wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini:ro
-      - ./log/fpm:/var/log/php
+      # - ./log/fpm:/usr/local/var/log/php
     networks:
-      - front
       - back
+      - front
   wp-cli:
     image: wordpress:cli-php${PHP_VERSION:-}
     depends_on:

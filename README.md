@@ -26,8 +26,8 @@ The following variables are available for use in your `.env` file:
 | `DB_PASS`           | Database user password               |
 | `NGX_HOST`          | Hostname of virtual host             |
 | `NGX_PORT`          | The port on the host machine to bind the nginx container's port to. Determines the port to access the WordPress installation on the host machine |
-| `PHP_VERSION`       | Format: `<major>.<minor>`. Versions `7.0` to `7.2` supported |
-| `WP_VERSION`        | Format: `<major>.<minor>`. Versions `4.7` to `5.0` supported |
+| `PHP_VERSION`       | Format: `<major>.<minor>`. |
+| `WP_VERSION`        | Format: `<major>.<minor>`. |
 | `WP_DEBUG`          |  |
 | `WP_TABLE_PREFIX`   |  |
 | `WP_AUTH_KEY`       |  |

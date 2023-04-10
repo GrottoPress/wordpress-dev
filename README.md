@@ -7,7 +7,7 @@ A WordPress development environment, using [docker](https://www.docker.com) (via
 - Create a new directory for your project: `mkdir my-wordpress-project`
 - Change into this directory: `cd my-wordpress-project`
 - Clone this repository: `git clone https://github.com/GrottoPress/wordpress-dev.git ../wp-dev`
-- Copy `src/` files into your new project's directory: `cp -rf ../wp-dev/src/* .`
+- Copy `src/` files into your new project's directory: `cp -rf ../wp-dev/src/. .`
 - Copy the `.sample.env` file to `.env`: `cp .sample.env .env`
 - Set permissions for the `.env` file: `chmod 0600 .env`
 - Edit the variables in your new `.env` file to taste

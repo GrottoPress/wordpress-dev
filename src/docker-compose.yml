@@ -76,6 +76,7 @@ services:
       WORDPRESS_CONFIG_EXTRA: |
         define( 'AUTOMATIC_UPDATER_DISABLED', true );
         define( 'WP_HOME', 'http://${NGX_HOST:-}:${NGX_PORT:-}' );
+        define( 'WP_MEMORY_LIMIT', '${WP_MEMORY_LIMIT:-}' );
         define( 'WP_SITEURL', 'http://${NGX_HOST:-}:${NGX_PORT:-}' );
     restart: always
     volumes:

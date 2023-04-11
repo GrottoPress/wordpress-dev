@@ -75,6 +75,8 @@ services:
       WORDPRESS_LOGGED_IN_SALT: ${WP_LOGGED_IN_SALT:-}
       WORDPRESS_CONFIG_EXTRA: |
         define( 'AUTOMATIC_UPDATER_DISABLED', true );
+        define( 'WP_HOME', 'http://${NGX_HOST:-}:${NGX_PORT:-}' );
+        define( 'WP_SITEURL', 'http://${NGX_HOST:-}:${NGX_PORT:-}' );
     restart: always
     volumes:
       - app:/var/www/html

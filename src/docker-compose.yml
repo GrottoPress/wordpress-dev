@@ -58,7 +58,7 @@ services:
     # user: node
     networks:
       - back
-  wordpress:
+  wordpress: &wp
     image: wordpress:${WP_VERSION:-}-php${PHP_VERSION:-}-fpm-alpine
     depends_on:
       - mariadb
@@ -85,14 +85,14 @@ services:
       - back
       - front
   wp-cli:
+    <<: *wp
     image: wordpress:cli-php${PHP_VERSION:-}
-    depends_on:
-      - mariadb
     volumes:
       - app:/var/www/html
       - ./app:/var/www/html/wp-content
     networks:
       - back
+    restart: "no"
 networks:
   back: {}
   front: {}

@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 services:
   composer:
     image: prooph/composer:${PHP_VERSION:-}
@@ -92,7 +92,7 @@ services:
       - ./app:/var/www/html/wp-content
     networks:
       - back
-    restart: "no"
+    restart: 'no'
 networks:
   back: {}
   front: {}
